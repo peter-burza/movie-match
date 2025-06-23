@@ -1,15 +1,18 @@
 import { useState } from "react";
 
 export default function MovieCard(props) {
-  const { movieData, setDetail, detail } = props;
-  const { original_title, overview, poster_path, backdrop_path, video } =
+  const { movieData, setDetail, genreList } = props;
+  const { original_title, overview, poster_path, video, genre_ids } =
     movieData || {};
 
+  const genres = Object.values(genreList).filter((genre) =>
+    genre_ids?.includes(genre.id)
+  );
   return (
     <div>
       <button
         onClick={() => {
-          setDetail({ original_title, overview });
+          setDetail({ original_title, overview, genres });
         }}
         className="relative max-w-55 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none"
       >
