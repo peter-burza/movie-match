@@ -6,7 +6,9 @@ export default function Movies(props) {
   const { searchedMovie } = props;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [detail, setDetail] = useState(null);
+  const [movieDetailIndex, setMovieDetailIndex] = useState(null);
+
+
 
   useEffect(() => {
     if (loading || !localStorage) return; // close guard..
@@ -73,6 +75,9 @@ export default function Movies(props) {
     fetchMovieData(searchedMovie);
   }, [searchedMovie]);
 
+
+
+  
   if (loading || !data) {
     return (
       <div>
@@ -83,21 +88,19 @@ export default function Movies(props) {
 
   return (
     <main className="flex flex-wrap justify-center max-w-[1368px] gap-10">
-      {detail && (
+      {movieDetailIndex && (
         <Modal
           handleCloseModal={() => {
-            setDetail(null);
+            setMovieDetailIndex(null);
           }}
         >
           {" "}
-          {/* Do Modal only if detail is true */}
+          {/* Do Modal only if movieDetailIndex is true */}
           <div>
-            <h6>Name</h6>
-            <h2>{detail.original_title}</h2>
+            <h6>{data.results[movieDetailIndex].original_title}</h6>
           </div>
           <div>
-            <h6>Description</h6>
-            <p>{detail.overview}</p>
+            <h6>{data.results[movieDetailIndex].overview}</h6>
           </div>
         </Modal>
       )}
@@ -105,9 +108,11 @@ export default function Movies(props) {
         return (
           <MovieCard
             key={movieDataIndex}
-            movieData={movieData}
-            setDetail={setDetail}
-            detail={detail}
+            movieIndex={movieDataIndex}
+            original_title={movieData.original_title}
+            poster_path={movieData.poster_path}
+            // movieData={movieData}
+            setMovieDetailIndex={setMovieDetailIndex}
           />
         );
       })}

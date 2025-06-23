@@ -1,15 +1,14 @@
 import { useState } from "react";
 
 export default function MovieCard(props) {
-  const { movieData, setDetail, detail } = props;
-  const { original_title, overview, poster_path, backdrop_path, video } =
-    movieData || {};
+  const { original_title, poster_path, setMovieDetailIndex, movieDataIndex } = props;
+  // const { original_title, poster_path } = movieData || {};
 
   return (
     <div>
       <button
         onClick={() => {
-          setDetail({ original_title, overview });
+          setMovieDetailIndex({movieDataIndex});
         }}
         className="relative max-w-55 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none"
       >
