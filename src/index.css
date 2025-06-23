@@ -5,3 +5,51 @@
   padding: 0 32px;
   margin: 0 auto;
 }
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal-underlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(22, 22, 22);
+  opacity: 0.8;
+  z-index: 99;
+  border: none;
+  width: 100%;
+  box-shadow: unset;
+}
+
+.modal-underlay:hover {
+  transform: translate(0);
+  box-shadow: unset;
+}
+
+.modal-content {
+  position: relative;
+  z-index: 101;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 650px;
+  border-radius: 1rem;
+  border: 1px solid rgb(10, 10, 10);
+  background: rgb(145, 145, 145);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+  justify-content: center; */
+  gap: 1rem;
+}
