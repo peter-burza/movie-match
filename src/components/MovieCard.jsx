@@ -59,7 +59,7 @@ export default function MovieCard(props) {
               <p>{overview}</p>
             </div>
             <div>
-              {movieImages?.posters.map((poster, posterIndex) => {
+              {/* {movieImages?.posters.map((poster, posterIndex) => {
                 return (
                   <img
                     key={posterIndex}
@@ -67,9 +67,9 @@ export default function MovieCard(props) {
                     alt="image failed to load"
                   />
                 );
-              })}
+              })} */}
               <img
-                src={`https://image.tmdb.org/t/p/original${movieImages?.posters[5].file_path}`}
+                src={`https://image.tmdb.org/t/p/original${movieImages?.backdrops[0]?.file_path}`}
                 alt="image failed to load"
               />
             </div>
