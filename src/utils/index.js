@@ -1,48 +1,23 @@
-// export async function fetchData(dataType, baseUrl, setLoading, setFetchedData) {
-//   setLoading(true);
-//   try {
-//     const url = baseUrl;
-//     const options = {
-//       method: "GET",
-//       headers: {
-//         accept: "application/json",
-//         Authorization:
-//           "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MWRiZTMyZGYzZmZmNGFhNDk5MWIyNTI5MzY1YTE4ZSIsIm5iZiI6MTc1MDQwMDcxMi44NjA5OTk4LCJzdWIiOiI2ODU0ZmVjODRlMWJlZDUwNWUwY2Y2MzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.2YIFbjc7_BFrYz_skVjFzF-IGoeQ7Ku4RmjwUtXsLdE",
-//       },
-//     };
-//     const res = await fetch(url, options);
-//     const fetchedData = await res.json();
-//     console.log(`Fetched movie ${dataType} from API:`, fetchedData);
-//     setFetchedData(fetchedData); // ✅ return it here
-//   } catch (err) {
-//     console.log(err);
-//   } finally {
-//     setLoading(false);
-//   }
-// }
 export async function fetchData(dataType, baseUrl, setLoading, setFetchedData) {
-  setLoading(true);
+  // setLoading(true);
   try {
+    const url = baseUrl;
     const options = {
       method: "GET",
       headers: {
         accept: "application/json",
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MWRiZTMyZGYzZmZmNGFhNDk5MWIyNTI5MzY1YTE4ZSIsIm5iZiI6MTc1MDQwMDcxMi44NjA5OTk4LCJzdWIiOiI2ODU0ZmVjODRlMWJlZDUwNWUwY2Y2MzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.2YIFbjc7_BFrYz_skVjFzF-IGoeQ7Ku4RmjwUtXsLdE", // Replace with your actual token
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MWRiZTMyZGYzZmZmNGFhNDk5MWIyNTI5MzY1YTE4ZSIsIm5iZiI6MTc1MDQwMDcxMi44NjA5OTk4LCJzdWIiOiI2ODU0ZmVjODRlMWJlZDUwNWUwY2Y2MzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.2YIFbjc7_BFrYz_skVjFzF-IGoeQ7Ku4RmjwUtXsLdE",
       },
     };
-    const res = await fetch(baseUrl, options);
+    const res = await fetch(url, options);
     const fetchedData = await res.json();
-    console.log(`Fetched movie ${dataType}:`, fetchedData);
-    if (setFetchedData) {
-      setFetchedData(fetchedData);
-    }
-    return fetchedData;
+    console.log(`Fetched movie ${dataType} from API:`, fetchedData);
+    setFetchedData(fetchedData);
   } catch (err) {
-    console.error(`Error fetching ${dataType}:`, err);
-    return null;
+    console.log(err);
   } finally {
-    setLoading(false);
+    // setLoading(false);
   }
 }
 
