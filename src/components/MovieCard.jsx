@@ -1,15 +1,105 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchData } from "../utils/index.js";
+import Modal from "./Modal";
 
 export default function MovieCard(props) {
-  const { original_title, poster_path, setMovieDetailIndex, movieDataIndex } = props;
-  // const { original_title, poster_path } = movieData || {};
+  const { movieData, /*detail, setDetail,*/ genreList, setLoading, loading } =
+    props;
+  const { original_title, overview, poster_path, video, genre_ids, id } =
+    movieData || {};
+  const [movieImages, setMovieImages] = useState(null);
+  const [detail, setDetail] = useState(null);
+
+  // Handle genre list
+  const genreMap = {};
+  if (genreList && genreList.genres) {
+    genreList.genres.forEach((genre) => {
+      genreMap[genre.id] = genre.name;
+    });
+  }
+
+  const genres = genre_ids.map((id) => genreMap[id]);
+
+  useEffect(() => {
+    if (!detail) return;
+    fetchData(
+      "Images",
+      `https://api.themoviedb.org/3/movie/${id}/images`,
+      setLoading,
+      setMovieImages
+    );
+    // console.log(original_title);
+    console.log("detail changed:", detail);
+  }, [detail]);
+
+  if (loading) {
+    return (
+      <div>
+        <h4>Loading...</h4>
+      </div>
+    );
+  }
 
   return (
     <div>
+      {detail && (
+        <Modal
+          handleCloseModal={() => {
+            setDetail(null);
+          }}
+        >
+          <div className="text-white">
+            <div>
+              <h5>{genres}</h5>
+              <h6 className="text-xl">{original_title}</h6>
+              <h2></h2>
+            </div>
+            <div>
+              <h6>Description</h6>
+              <p>{overview}</p>
+            </div>
+            <div>
+              {/* {movieImages?.posters.map((poster, posterIndex) => {
+                return (
+                  <img
+                    key={posterIndex}
+                    src={`https://image.tmdb.org/t/p/original${poster.file_path}`}
+                    alt="image failed to load"
+                  />
+                );
+              })} */}
+              <img
+                src={`https://image.tmdb.org/t/p/original${movieImages?.backdrops[0]?.file_path}`}
+                alt="image failed to load"
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
       <button
         onClick={() => {
-          setMovieDetailIndex({movieDataIndex});
+          setDetail({
+            original_title,
+            overview,
+            genres,
+          });
         }}
+        /*
+const url = 'https://api.themoviedb.org/3/movie/movie_id/images';
+const options = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MWRiZTMyZGYzZmZmNGFhNDk5MWIyNTI5MzY1YTE4ZSIsIm5iZiI6MTc1MDQwMDcxMi44NjA5OTk4LCJzdWIiOiI2ODU0ZmVjODRlMWJlZDUwNWUwY2Y2MzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.2YIFbjc7_BFrYz_skVjFzF-IGoeQ7Ku4RmjwUtXsLdE'
+  }
+};
+
+fetch(url, options)
+  .then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error(err));
+*/
+
         className="relative max-w-55 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none"
       >
         <img
