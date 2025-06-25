@@ -33,6 +33,14 @@ export default function Movies(props) {
     );
   }, [searchedMovie]);
 
+useEffect(() => {
+  fetchData(
+      "genres",
+      'https://api.themoviedb.org/3/genre/movie/list?language=en',
+      setLoading,
+      setGenreList
+    );
+}, [])
 
   if (loading || !previewData) {
     return (
