@@ -72,12 +72,15 @@ export default function MovieCard(props) {
               />
             </div>
             <div>
-              <div>
-                <div>
+              <div className="flex flex-col gap-5">
+                <div className="">
                   <h6 className="text-4xl font-medium tracking-wider">
                     {original_title}
                   </h6>
-                  <h5 className="text-3xl"></h5>
+                  <h5 className="flex flex-row items-center text-3xl gap-1">
+                    <span>9.0</span>
+                    <i className="fa-solid fa-star text-lg text-yellow-400"></i>
+                  </h5>
                 </div>
                 <p>
                   {Number(release_date.substring(0, 4)) <
@@ -88,8 +91,8 @@ export default function MovieCard(props) {
                 </p>
               </div>
 
-              <h5>{genres?.join(", ")}</h5>
               <p>{overview}</p>
+              <h5>{genres?.join(", ")}</h5>
             </div>
           </Modal>
         ))}
