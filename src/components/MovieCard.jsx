@@ -3,11 +3,18 @@ import { fetchData } from "../utils/index.js";
 import Modal from "./Modal";
 
 export default function MovieCard(props) {
-  const { movieData, /*detail, setDetail,*/ genreList } = props;
-  const { original_title, overview, poster_path, video, genre_ids, id } =
-    movieData || {};
+  const { movieData, genreList } = props;
+  const {
+    original_title,
+    overview,
+    poster_path,
+    video,
+    genre_ids,
+    id,
+    release_date,
+  } = movieData || {};
   const [movieImages, setMovieImages] = useState(null);
-  const [detail, setDetail] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [movieDetailLoading, setMovieDetailLoading] = useState(false);
 
   // Handle genre list
@@ -22,32 +29,29 @@ export default function MovieCard(props) {
   console.log(genres);
 
   useEffect(() => {
-    if (!detail) return;
+    if (!modalVisible) return;
     fetchData(
       "Images",
       `https://api.themoviedb.org/3/movie/${id}/images`,
       setMovieDetailLoading,
       setMovieImages
     );
-    // console.log(original_title);
-    console.log("detail changed:", detail);
-  }, [detail]);
-
-  // if (movieDetailLoading) {
-  //   return (
-  //     <div>
-  //       <h4>Loading...</h4>
-  //     </div>
-  //   );
-  // }
+    fetchData(
+      "Images",
+      `https://api.themoviedb.org/3/movie/${id}/images`,
+      setMovieDetailLoading,
+      setMovieImages
+    );
+    console.log("detail changed:", modalVisible);
+  }, [modalVisible]);
 
   return (
     <div>
-      {detail &&
-        (!movieImages ? (
+      {modalVisible &&
+        (!movieImages && !movieDetailLoading ? (
           <Modal
             handleCloseModal={() => {
-              setDetail(null);
+              setModalVisible(false);
             }}
           >
             <div>
@@ -57,10 +61,9 @@ export default function MovieCard(props) {
         ) : (
           <Modal
             handleCloseModal={() => {
-              setDetail(null);
+              setModalVisible(false);
             }}
           >
-            {/* <div className="text-white"> */}
             <div>
               <img
                 src={`https://image.tmdb.org/t/p/original${poster_path}`}
@@ -69,39 +72,32 @@ export default function MovieCard(props) {
               />
             </div>
             <div>
-              <h5>{genres}</h5>
-              <h6 className="text-xl">{original_title}</h6>
-              <h6>Description</h6>
+              <div>
+                <div>
+                  <h6 className="text-4xl font-medium tracking-wider">
+                    {original_title}
+                  </h6>
+                  <h5 className="text-3xl"></h5>
+                </div>
+                <p>
+                  {Number(release_date.substring(0, 4)) <
+                  new Date().getFullYear()
+                    ? release_date.substring(0, 4)
+                    : `Not released (${release_date.substring(0, 4)})`}{" "}
+                  |
+                </p>
+              </div>
+
+              <h5>{genres?.join(", ")}</h5>
               <p>{overview}</p>
             </div>
-            {/* </div> */}
           </Modal>
         ))}
 
       <button
         onClick={() => {
-          setDetail({
-            original_title,
-            overview,
-            genres,
-          });
+          setModalVisible(true);
         }}
-        /*
-const url = 'https://api.themoviedb.org/3/movie/movie_id/images';
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MWRiZTMyZGYzZmZmNGFhNDk5MWIyNTI5MzY1YTE4ZSIsIm5iZiI6MTc1MDQwMDcxMi44NjA5OTk4LCJzdWIiOiI2ODU0ZmVjODRlMWJlZDUwNWUwY2Y2MzMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.2YIFbjc7_BFrYz_skVjFzF-IGoeQ7Ku4RmjwUtXsLdE'
-  }
-};
-
-fetch(url, options)
-  .then(res => res.json())
-  .then(json => console.log(json))
-  .catch(err => console.error(err));
-*/
-
         className="relative max-w-55 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none"
       >
         <img
