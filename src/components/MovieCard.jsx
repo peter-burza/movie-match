@@ -18,6 +18,7 @@ export default function MovieCard(props) {
   const [movieImages, setMovieImages] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [movieReleaseDates, setMovieReleaseDates] = useState(null);
+  const [movieGenres, setMovieGenres] = useState(null);
 
   // Handle genre list
   const genreMap = {};
@@ -153,7 +154,7 @@ export default function MovieCard(props) {
                 className="max-w-100"
               />
             </div>
-            <div>
+            <div className="flex flex-col gap-13">
               <div className="flex flex-col gap-5">
                 <div className="flex justify-between">
                   <h6 className="text-4xl font-medium tracking-wider">
@@ -172,9 +173,23 @@ export default function MovieCard(props) {
                     " | " + getAge(movieReleaseDates)}
                 </p>
               </div>
-
-              <p>{overview}</p>
-              <h5>{genres?.join(", ")}</h5>
+              <div className="flex flex-col gap-8">
+                <div>
+                  <p>{overview}</p>
+                </div>
+                <div className="flex gap-10">
+                  <div className="flex flex-col gap-4 text-gray-500">
+                    <p>Starring</p>
+                    <p>Directed</p>
+                    <p>Genre</p>
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <p>Starring</p>
+                    <p>Directed</p>
+                    <p>{genres?.join(", ")}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </Modal>
         ))}
