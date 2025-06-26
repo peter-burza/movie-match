@@ -3,13 +3,12 @@ import { fetchData } from "../utils/index.js";
 import Modal from "./Modal";
 
 export default function MovieCard(props) {
-  const { movieData, genreList } = props;
+  const { movieData } = props;
   const {
     original_title,
     overview,
     poster_path,
     video,
-    genre_ids,
     id,
     release_date,
   } = movieData || {};
@@ -18,45 +17,14 @@ export default function MovieCard(props) {
   const [movieImages, setMovieImages] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [movieReleaseDates, setMovieReleaseDates] = useState(null);
-  const [movieGenres, setMovieGenres] = useState(null);
-
-  // Handle genre list
-  const genreMap = {};
-  if (genreList && genreList.genres) {
-    genreList.genres.forEach((genre) => {
-      genreMap[genre.id] = genre.name;
-    });
-  }
-
-  const genres = genre_ids.map((id) => genreMap[id]);
+  const [credits, setCredits] = useState(null);
 
   function formatMinutes(totalMinutes) {
     if (totalMinutes == 0) return "";
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
-    return `${hours}h ${minutes}min`;
+    return `${hours ? `${hours}h ` : ''}${minutes}min`;
   }
-
-  // function getAge(releaseDates) {
-  //   const priorityCountries = [
-  //     "CZ",
-  //     "US",
-  //     "GB",
-  //     "DE",
-  //     "FR",
-  //     "IN",
-  //     "JP",
-  //     "KR",
-  //     "CA",
-  //     "AU",
-  //   ];
-  //   const czUs = releaseDates?.results.filter((result) => {
-  //     priorityCountries.map((countrySign) => {
-  //       result.iso_3166_1 === countrySign;
-  //     });
-  //   });
-  //   if (czUs) return czUs[0]?.release_dates?.certification;
-  // }
 
   function getYear(release_date) {
     const year = Number(release_date.substring(0, 4));
@@ -125,6 +93,14 @@ export default function MovieCard(props) {
       setMovieContentLoading,
       setMovieReleaseDates
     );
+    fetchData(
+      "Credits",
+      `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+      setMovieContentLoading,
+      setCredits
+    );
+
+
     console.log("detail changed:", modalVisible);
   }, [modalVisible]);
 
@@ -147,13 +123,11 @@ export default function MovieCard(props) {
               setModalVisible(false);
             }}
           >
-            <div>
-              <img
-                src={`https://image.tmdb.org/t/p/original${poster_path}`}
-                alt="image failed to load"
-                className="max-w-100"
-              />
-            </div>
+            <img
+              src={`https://image.tmdb.org/t/p/original${poster_path}`}
+              alt="image failed to load"
+              className="max-h-full"
+            />
             <div className="flex flex-col gap-13">
               <div className="flex flex-col gap-5">
                 <div className="flex justify-between">
@@ -185,8 +159,10 @@ export default function MovieCard(props) {
                   </div>
                   <div className="flex flex-col gap-4">
                     <p>Starring</p>
-                    <p>Directed</p>
-                    <p>{genres?.join(", ")}</p>
+                    <p>{
+                      credits?.crew.find(crewMember => crewMember.job === 'Director')?.original_name || 'Unknow Director'
+                    }</p>
+                    <p>{movieDetails?.genres.map((genre) => { return genre.name })?.join(", ")}</p>
                   </div>
                 </div>
               </div>
