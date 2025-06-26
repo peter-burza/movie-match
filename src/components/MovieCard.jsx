@@ -13,9 +13,11 @@ export default function MovieCard(props) {
     id,
     release_date,
   } = movieData || {};
-  const [movieImages, setMovieImages] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [movieDetailLoading, setMovieDetailLoading] = useState(false);
+  const [movieContentLoading, setMovieContentLoading] = useState(false);
+  const [movieImages, setMovieImages] = useState(null);
+  const [movieDetails, setMovieDetails] = useState(null);
+  const [movieReleaseDates, setMovieReleaseDates] = useState(null);
 
   // Handle genre list
   const genreMap = {};
@@ -26,21 +28,101 @@ export default function MovieCard(props) {
   }
 
   const genres = genre_ids.map((id) => genreMap[id]);
-  console.log(genres);
+
+  function formatMinutes(totalMinutes) {
+    if (totalMinutes == 0) return "";
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}min`;
+  }
+
+  // function getAge(releaseDates) {
+  //   const priorityCountries = [
+  //     "CZ",
+  //     "US",
+  //     "GB",
+  //     "DE",
+  //     "FR",
+  //     "IN",
+  //     "JP",
+  //     "KR",
+  //     "CA",
+  //     "AU",
+  //   ];
+  //   const czUs = releaseDates?.results.filter((result) => {
+  //     priorityCountries.map((countrySign) => {
+  //       result.iso_3166_1 === countrySign;
+  //     });
+  //   });
+  //   if (czUs) return czUs[0]?.release_dates?.certification;
+  // }
+
+  function getYear(release_date) {
+    const year = Number(release_date.substring(0, 4));
+    return year < new Date().getFullYear()
+      ? `${year}`
+      : `Not released (${year})`;
+  }
+
+  function getAge(releaseDates) {
+    const priorityCountries = [
+      "CZ",
+      "US",
+      "GB",
+      "DE",
+      "FR",
+      "IN",
+      "JP",
+      "KR",
+      "CA",
+      "AU",
+    ];
+
+    const filteredResults = releaseDates?.results.find((result) => {
+      const code = result.iso_3166_1?.toUpperCase();
+      return code && priorityCountries.includes(code); // exclude empty codes
+    });
+
+    const cert = filteredResults?.release_dates?.[0]?.certification?.trim();
+    if (!cert) return null;
+
+    const normalized = cert.toUpperCase();
+
+    if (normalized.match(/^\d+$/)) return normalized + "+";
+    if (normalized.match(/^\+?\d+$/)) return normalized.replace("+", "") + "+";
+    if (normalized === "PG") return "10+";
+    if (normalized === "PG-13") return "13+";
+    if (["G", "U", "AL", "T", "A"].includes(normalized)) return "0+";
+    if (normalized === "12A") return "12+";
+    if (normalized === "15") return "15+";
+    if (normalized === "16") return "16+";
+    if (["18", "R", "C", "NC-17"].includes(normalized)) return "18+";
+    if (["MA15+", "M"].includes(normalized)) return "15+";
+    if (normalized === "B") return "12+";
+    if (normalized === "K-12") return "12+";
+
+    return cert;
+  }
 
   useEffect(() => {
     if (!modalVisible) return;
     fetchData(
       "Images",
       `https://api.themoviedb.org/3/movie/${id}/images`,
-      setMovieDetailLoading,
+      setMovieContentLoading,
       setMovieImages
     );
     fetchData(
-      "Images",
-      `https://api.themoviedb.org/3/movie/${id}/images`,
-      setMovieDetailLoading,
-      setMovieImages
+      "Details",
+      `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+      setMovieContentLoading,
+      setMovieDetails
+    );
+    fetchData(
+      "Release Dates",
+      `https://api.themoviedb.org/3/movie/${id}/release_dates`,
+      setMovieContentLoading,
+      setMovieReleaseDates
     );
     console.log("detail changed:", modalVisible);
   }, [modalVisible]);
@@ -48,7 +130,7 @@ export default function MovieCard(props) {
   return (
     <div>
       {modalVisible &&
-        (!movieImages && !movieDetailLoading ? (
+        (!movieImages && !movieContentLoading ? (
           <Modal
             handleCloseModal={() => {
               setModalVisible(false);
@@ -73,21 +155,21 @@ export default function MovieCard(props) {
             </div>
             <div>
               <div className="flex flex-col gap-5">
-                <div className="">
+                <div className="flex justify-between">
                   <h6 className="text-4xl font-medium tracking-wider">
                     {original_title}
                   </h6>
-                  <h5 className="flex flex-row items-center text-3xl gap-1">
+                  <h5 className="flex flex-row items-end text-3xl gap-1">
                     <span>9.0</span>
-                    <i className="fa-solid fa-star text-lg text-yellow-400"></i>
+                    <i className="fa-solid fa-star text-lg text-yellow-400 pb-2"></i>
                   </h5>
                 </div>
                 <p>
-                  {Number(release_date.substring(0, 4)) <
-                  new Date().getFullYear()
-                    ? release_date.substring(0, 4)
-                    : `Not released (${release_date.substring(0, 4)})`}{" "}
-                  |
+                  {getYear(release_date)}
+                  {formatMinutes(movieDetails?.runtime) &&
+                    " | " + formatMinutes(movieDetails?.runtime)}
+                  {getAge(movieReleaseDates) &&
+                    " | " + getAge(movieReleaseDates)}
                 </p>
               </div>
 
