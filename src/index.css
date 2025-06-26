@@ -23,7 +23,7 @@
 .modal-underlay {
   position: absolute;
   inset: 0;
-  background: rgb(22, 22, 22);
+  background: rgb(0, 0, 0);
   opacity: 0.8;
   z-index: 99;
   border: none;
@@ -39,17 +39,18 @@
 .modal-content {
   position: relative;
   z-index: 101;
-  max-width: 1000px;
+  color: white;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  min-height: 650px;
-  border-radius: 1rem;
-  border: 1px solid rgb(10, 10, 10);
-  background: rgb(145, 145, 145);
-  padding: 1rem;
+  /* max-height: 75vh; */
+  /* border-radius: 1rem; */
+  /* border: 1px solid rgb(241, 237, 237); */
+  background: rgb(0, 0, 0);
+  padding: 4.5rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   /* align-items: center;
   justify-content: center; */
-  gap: 1rem;
+  gap: 4rem;
 }

@@ -3,8 +3,7 @@ import { fetchData } from "../utils/index.js";
 import Modal from "./Modal";
 
 export default function MovieCard(props) {
-  const { movieData, /*detail, setDetail,*/ genreList } =
-    props;
+  const { movieData, /*detail, setDetail,*/ genreList } = props;
   const { original_title, overview, poster_path, video, genre_ids, id } =
     movieData || {};
   const [movieImages, setMovieImages] = useState(null);
@@ -20,7 +19,7 @@ export default function MovieCard(props) {
   }
 
   const genres = genre_ids.map((id) => genreMap[id]);
-  console.log(genres)
+  console.log(genres);
 
   useEffect(() => {
     if (!detail) return;
@@ -44,8 +43,8 @@ export default function MovieCard(props) {
 
   return (
     <div>
-      {detail && (
-        !movieImages ? (
+      {detail &&
+        (!movieImages ? (
           <Modal
             handleCloseModal={() => {
               setDetail(null);
@@ -61,25 +60,23 @@ export default function MovieCard(props) {
               setDetail(null);
             }}
           >
-            <div className="text-white">
-              <div>
-                <h5>{genres}</h5>
-                <h6 className="text-xl">{original_title}</h6>
-              </div>
-              <div>
-                <h6>Description</h6>
-                <p>{overview}</p>
-              </div>
-              <div>
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movieImages?.backdrops[0]?.file_path}`}
-                  alt="image failed to load"
-                />
-              </div>
+            {/* <div className="text-white"> */}
+            <div>
+              <img
+                src={`https://image.tmdb.org/t/p/original${poster_path}`}
+                alt="image failed to load"
+                className="max-w-100"
+              />
             </div>
+            <div>
+              <h5>{genres}</h5>
+              <h6 className="text-xl">{original_title}</h6>
+              <h6>Description</h6>
+              <p>{overview}</p>
+            </div>
+            {/* </div> */}
           </Modal>
-        )
-      )}
+        ))}
 
       <button
         onClick={() => {
