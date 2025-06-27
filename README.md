@@ -5,5 +5,5 @@
 TMDb username: peter-burza
 
 notes:
-
-- fetch rating of the movie in the modal section
+- nastavit aby sa do localStorage ukladalo vzdy iba lowercase nazvy
+- nastavit aby sa filmy co nemaju poster_path nezobrazili vobec.

@@ -1,35 +1,37 @@
 import { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
-import Modal from "./Modal";
-import { fetchData } from "../utils/index.js";
+import { fetchData, tryGetCacheData } from "../utils/index.js";
 
 export default function Movies(props) {
   const { searchedMovie } = props;
   const [previewData, setPreviewData] = useState(null);
   const [loading, setLoading] = useState(false);
-  // const [detail, setDetail] = useState(null);
-  const [genreList, setGenreList] = useState(null);
 
   // ---------  After searched a movie  --------- //
   useEffect(() => {
-    if (loading || !localStorage) return; // close guard..
-    //If there is any movie database
-    let cache = {};
-    if (localStorage.getItem("movie-database")) {
-      cache = JSON.parse(localStorage.getItem("movie-database"));
-    }
-    //If the searched movie is in the cche, otherwise fetch form API
-    if (searchedMovie in cache) {
-      setPreviewData(cache[searchedMovie]);
-      console.log("Found movie in cache: ", cache);
-      return;
-    }
+    // if (loading || !localStorage) return; // close guard..
+    // //If there is any movie database
+    // let cache = {};
+    // if (localStorage.getItem("movie-preview-database")) {
+    //   cache = JSON.parse(localStorage.getItem("movie-preview-database"));
+    // }
+    // //If the searched movie is in the cache, otherwise fetch form API
+    // if (searchedMovie in cache) {
+    //   setPreviewData(cache[searchedMovie]);
+    //   console.log("Found movie preview in cache: ", cache);
+    //   return;
+    // }
 
+    
+    if (tryGetCacheData(loading, "movie-preview-database", searchedMovie, setPreviewData)) return
     fetchData(
-      "movie data",
+      "data",
       `https://api.themoviedb.org/3/search/movie?query=${searchedMovie}&include_adult=false&include_video=true&language=en-US&page=1`,
       setLoading,
-      setPreviewData
+      setPreviewData,
+      searchedMovie,
+      'movie-preview-database',
+      JSON.parse(localStorage.getItem('movie-preview-database')) || {}
     );
   }, [searchedMovie]);
 

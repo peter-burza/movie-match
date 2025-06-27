@@ -4,7 +4,7 @@ import Footer from "./components/Footer"
 import { useState } from "react"
 
 function App() {
-  const [searchedMovie, setSearchedMovie] = useState('Spider-man')
+  const [searchedMovie, setSearchedMovie] = useState('green book')
 
   return (
     <>

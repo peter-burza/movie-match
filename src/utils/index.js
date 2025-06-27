@@ -1,4 +1,4 @@
-export async function fetchData(dataType, baseUrl, setLoading, setFetchedData) {
+export async function fetchData(dataType, baseUrl, setLoading, setFetchedData, searchedMovie, localStorageName, cache) {
   // setLoading(true);
   try {
     const url = baseUrl;
@@ -14,11 +14,30 @@ export async function fetchData(dataType, baseUrl, setLoading, setFetchedData) {
     const fetchedData = await res.json();
     console.log(`Fetched movie ${dataType} from API:`, fetchedData);
     setFetchedData(fetchedData);
+    // save fetched data to cache
+    cache[searchedMovie] = fetchedData;
+    localStorage.setItem(localStorageName, JSON.stringify(cache));
   } catch (err) {
     console.log(err);
   } finally {
     // setLoading(false);
   }
+}
+
+export function tryGetCacheData(loading, localStorageName, searchedMovie, setData) {
+  if (loading || !localStorage) return; // close guard..
+  //If there is any movie database
+  let cache = {};
+  if (localStorage.getItem(localStorageName)) {
+    cache = JSON.parse(localStorage.getItem(localStorageName));
+  }
+  //If the searched movie is in the cache, otherwise fetch form API
+  if (searchedMovie in cache) {
+    setData(cache[searchedMovie]);
+    console.log("Found movie preview in cache: ", cache);
+    return true;
+  }
+  return false
 }
 
 // --- Old Fetch Functions --- //
