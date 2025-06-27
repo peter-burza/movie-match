@@ -4,14 +4,8 @@ import Modal from "./Modal";
 
 export default function MovieCard(props) {
   const { movieData } = props;
-  const {
-    original_title,
-    overview,
-    poster_path,
-    video,
-    id,
-    release_date,
-  } = movieData || {};
+  const { original_title, overview, poster_path, video, id, release_date } =
+    movieData || {};
   const [modalVisible, setModalVisible] = useState(false);
   const [movieContentLoading, setMovieContentLoading] = useState(false);
   const [movieImages, setMovieImages] = useState(null);
@@ -23,7 +17,7 @@ export default function MovieCard(props) {
     if (totalMinutes == 0) return "";
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
-    return `${hours ? `${hours}h ` : ''}${minutes}min`;
+    return `${hours ? `${hours}h ` : ""}${minutes}min`;
   }
 
   function getYear(release_date) {
@@ -100,7 +94,6 @@ export default function MovieCard(props) {
       setCredits
     );
 
-
     console.log("detail changed:", modalVisible);
   }, [modalVisible]);
 
@@ -128,14 +121,14 @@ export default function MovieCard(props) {
               alt="image failed to load"
               className="max-h-full"
             />
-            <div className="flex flex-col gap-13">
+            <div className="flex flex-col gap-13 overflow-y-auto max-h-[calc(90vh-9rem)] pr-4">
               <div className="flex flex-col gap-5">
                 <div className="flex justify-between">
                   <h6 className="text-4xl font-medium tracking-wider">
                     {original_title}
                   </h6>
                   <h5 className="flex flex-row items-end text-3xl gap-1">
-                    <span>9.0</span>
+                    <span>{movieDetails?.vote_average.toFixed(1)}</span>
                     <i className="fa-solid fa-star text-lg text-yellow-400 pb-2"></i>
                   </h5>
                 </div>
@@ -158,11 +151,26 @@ export default function MovieCard(props) {
                     <p>Genre</p>
                   </div>
                   <div className="flex flex-col gap-4">
-                    <p>Starring</p>
-                    <p>{
-                      credits?.crew.find(crewMember => crewMember.job === 'Director')?.original_name || 'Unknow Director'
-                    }</p>
-                    <p>{movieDetails?.genres.map((genre) => { return genre.name })?.join(", ")}</p>
+                    <p>
+                      {credits?.cast
+                        .slice(0, 3)
+                        .map((actor) => {
+                          return actor.original_name;
+                        })
+                        .join(", ")}
+                    </p>
+                    <p>
+                      {credits?.crew.find(
+                        (crewMember) => crewMember.job === "Director"
+                      )?.original_name || "Unknow Director"}
+                    </p>
+                    <p>
+                      {movieDetails?.genres
+                        .map((genre) => {
+                          return genre.name;
+                        })
+                        ?.join(", ")}
+                    </p>
                   </div>
                 </div>
               </div>
