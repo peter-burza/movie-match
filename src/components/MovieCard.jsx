@@ -1,17 +1,71 @@
 import { useEffect, useState } from "react";
-import { fetchData } from "../utils/index.js";
+import { fetchData, tryGetCacheData } from "../utils/index.js";
 import Modal from "./Modal";
 
 export default function MovieCard(props) {
-  const { movieData } = props;
+  const { moviePreviewData } = props;
   const { original_title, overview, poster_path, video, id, release_date } =
-    movieData || {};
+    moviePreviewData || {};
   const [modalVisible, setModalVisible] = useState(false);
   const [movieContentLoading, setMovieContentLoading] = useState(false);
   const [movieImages, setMovieImages] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [movieReleaseDates, setMovieReleaseDates] = useState(null);
-  const [credits, setCredits] = useState(null);
+  const [movieCredits, setMovieCredits] = useState(null);
+
+  const modalData = [
+    {
+      cache: {
+        dataType: "Details",
+        loading: movieContentLoading,
+        localStorageName: "movie-details-database",
+        movieId: id,
+        setData: setMovieDetails,
+      },
+      fetch: {
+        dataType: "Details",
+        baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+        setLoading: movieContentLoading,
+        setFetchedData: setMovieDetails,
+        movieId: id,
+        localStorageName: "movie-details-database",
+      },
+    },
+    {
+      cache: {
+        dataType: "Release Dates",
+        loading: movieContentLoading,
+        localStorageName: "movie-release_dates-database",
+        movieId: id,
+        setData: setMovieReleaseDates,
+      },
+      fetch: {
+        dataType: "Release Dates",
+        baseUrl: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
+        setLoading: movieContentLoading,
+        setFetchedData: setMovieReleaseDates,
+        movieId: id,
+        localStorageName: "movie-release_dates-database",
+      },
+    },
+    {
+      cache: {
+        dataType: "Credits",
+        loading: movieContentLoading,
+        localStorageName: "movie-credits-database",
+        movieId: id,
+        setData: setMovieCredits,
+      },
+      fetch: {
+        dataType: "Credits",
+        baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+        setLoading: movieContentLoading,
+        setFetchedData: setMovieCredits,
+        movieId: id,
+        localStorageName: "movie-credits-database",
+      },
+    },
+  ];
 
   function formatMinutes(totalMinutes) {
     if (totalMinutes == 0) return "";
@@ -69,38 +123,33 @@ export default function MovieCard(props) {
 
   useEffect(() => {
     if (!modalVisible) return;
-    fetchData(
-      "Images",
-      `https://api.themoviedb.org/3/movie/${id}/images`,
-      setMovieContentLoading,
-      setMovieImages
-    );
-    fetchData(
-      "Details",
-      `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
-      setMovieContentLoading,
-      setMovieDetails
-    );
-    fetchData(
-      "Release Dates",
-      `https://api.themoviedb.org/3/movie/${id}/release_dates`,
-      setMovieContentLoading,
-      setMovieReleaseDates
-    );
-    fetchData(
-      "Credits",
-      `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-      setMovieContentLoading,
-      setCredits
-    );
+    modalData.map((d) => {
+      if (
+        !tryGetCacheData(
+          d.cache.dataType,
+          d.cache.loading,
+          d.cache.localStorageName,
+          d.cache.movieId,
+          d.cache.setData
+        )
+      ) {
+        fetchData(
+          d.fetch.dataType,
+          d.fetch.baseUrl,
+          d.fetch.setLoading,
+          d.fetch.setFetchedData,
+          d.fetch.movieId,
+          d.fetch.localStorageName
+        );
+      }
+    });
 
-    console.log("detail changed:", modalVisible);
   }, [modalVisible]);
 
   return (
     <div>
       {modalVisible &&
-        (!movieImages && !movieContentLoading ? (
+        (!movieDetails && !movieCredits && ! movieReleaseDates && !movieContentLoading ? (
           <Modal
             handleCloseModal={() => {
               setModalVisible(false);
@@ -152,15 +201,15 @@ export default function MovieCard(props) {
                   </div>
                   <div className="flex flex-col gap-4">
                     <p>
-                      {credits?.cast
+                      {movieCredits?.cast
                         .slice(0, 3)
                         .map((actor) => {
                           return actor.original_name;
                         })
-                        .join(", ")}
+                        .join(", ") || "Unknow Starring"}
                     </p>
                     <p>
-                      {credits?.crew.find(
+                      {movieCredits?.crew.find(
                         (crewMember) => crewMember.job === "Director"
                       )?.original_name || "Unknow Director"}
                     </p>
@@ -169,7 +218,7 @@ export default function MovieCard(props) {
                         .map((genre) => {
                           return genre.name;
                         })
-                        ?.join(", ")}
+                        ?.join(", ") || "Unknow Genre"}
                     </p>
                   </div>
                 </div>

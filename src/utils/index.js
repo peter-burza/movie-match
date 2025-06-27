@@ -1,5 +1,24 @@
-export async function fetchData(dataType, baseUrl, setLoading, setFetchedData, searchedMovie, localStorageName, cache) {
+export function tryGetCacheData(dataType, loading, localStorageName, movie, setData) {
+  const searchedMovie = typeof movie === "string" ? movie.toLowerCase() : movie;
+  if (loading || !localStorage) return; // close guard..
+  //If there is any movie database
+  let cache = {};
+  if (localStorage.getItem(localStorageName)) {
+    cache = JSON.parse(localStorage.getItem(localStorageName));
+  }
+  //If the searched movie is in the cache, otherwise fetch form API
+  if (searchedMovie in cache) {
+    setData(cache[searchedMovie]);
+    console.log(`Found movie ${dataType} in cache: `, cache);
+    return true;
+  }
+  return false
+}
+
+export async function fetchData(dataType, baseUrl, setLoading, setFetchedData, movie, localStorageName) {
   // setLoading(true);
+  const searchedMovie = typeof movie === "string" ? movie.toLowerCase() : movie;
+  const cache = JSON.parse(localStorage.getItem(localStorageName)) || {}
   try {
     const url = baseUrl;
     const options = {
@@ -24,21 +43,7 @@ export async function fetchData(dataType, baseUrl, setLoading, setFetchedData, s
   }
 }
 
-export function tryGetCacheData(loading, localStorageName, searchedMovie, setData) {
-  if (loading || !localStorage) return; // close guard..
-  //If there is any movie database
-  let cache = {};
-  if (localStorage.getItem(localStorageName)) {
-    cache = JSON.parse(localStorage.getItem(localStorageName));
-  }
-  //If the searched movie is in the cache, otherwise fetch form API
-  if (searchedMovie in cache) {
-    setData(cache[searchedMovie]);
-    console.log("Found movie preview in cache: ", cache);
-    return true;
-  }
-  return false
-}
+
 
 // --- Old Fetch Functions --- //
 // async function fetchGenreList() {
