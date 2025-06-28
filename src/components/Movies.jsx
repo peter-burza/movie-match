@@ -3,13 +3,18 @@ import MovieCard from "./MovieCard";
 import { fetchData, tryGetCacheData } from "../utils/index.js";
 
 export default function Movies(props) {
-  const { searchedMovie, topRated, setTopRated } = props;
+  const { searchedMovie, topRated } = props;
   const [previewData, setPreviewData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (topRated) setPreviewData(topRated)
+  }, [topRated])
+
   // ---------  After searched a movie  --------- //
   useEffect(() => {
-    setTopRated(null)
+    if (!searchedMovie) return
+    console.log("searchedMovie changed:", searchedMovie);
     if (
       tryGetCacheData(
         "preview data",
@@ -34,15 +39,15 @@ export default function Movies(props) {
   if (loading || !previewData) {
     return (
       <div>
-        <h4>Loading...</h4>
+        <h4 className="text-3xl text-center text-gray-700">Loading...</h4>
       </div>
     );
   }
 
   return (
     <main className="flex flex-wrap justify-center max-w-[1368px] gap-10">
-      {console.log(topRated)}
-      {previewData.results.map((moviePreviewData, movieDataIndex) => {
+      {console.log(topRated.results)}
+      {previewData?.results.map((moviePreviewData, movieDataIndex) => {
         if (!moviePreviewData.poster_path) return;
         return (
           <MovieCard key={movieDataIndex} moviePreviewData={moviePreviewData} />

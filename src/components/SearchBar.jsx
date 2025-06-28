@@ -1,7 +1,7 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
 export default function SearchBar(props) {
-    const {setSearchedMovie} = props
+    const { setSearchedMovie } = props
     const [searchValue, setSearchValue] = useState('')
 
     return (
@@ -10,7 +10,7 @@ export default function SearchBar(props) {
                 <i className="fa-solid fa-film text-xl"></i>
             </a>
             <div className="flex items-center h-15 w-full max-w-[640px] bg-gray-100 rounded-md focus:border-0 drop-shadow-[0_5px_5px_rgba(185,185,185,0.5)] hover:drop-shadow-[0_5px_5px_rgba(185,185,185,1)] duration-200">
-                <input value={searchValue} onChange={((e) => {setSearchValue(e.target.value)})} className="px-6 outline-none w-full" placeholder="Search your thoughts" type="text" name="" id="" />
+                <input value={searchValue} onChange={((e) => { setSearchValue(e.target.value) })} className="px-6 outline-none w-full" placeholder="Search your thoughts" type="text" name="" id="" />
             </div>
             <button onClick={() => {
                 setSearchedMovie(searchValue)

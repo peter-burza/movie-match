@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { fetchData } from "./utils";
 
 function App() {
-  const [searchedMovie, setSearchedMovie] = useState("Spider-man");
+  const [initialized, setInitialized] = useState(false)
+  const [searchedMovie, setSearchedMovie] = useState('');
   const [topRated, setTopRated] = useState(null);
 
   useEffect(() => {
@@ -29,8 +30,10 @@ function App() {
         console.log(err);
       } finally {
         // setLoading(false);
+        setInitialized(true)
       }
     }
+
     fetchTopRatedMovies();
   }, []);
 
@@ -40,11 +43,11 @@ function App() {
         searchedMovie={searchedMovie}
         setSearchedMovie={setSearchedMovie}
       />
-      <Movies
-        searchedMovie={searchedMovie}
-        topRated={topRated}
-        setTopRated={setTopRated}
-      />
+      {initialized &&
+        <Movies
+          searchedMovie={searchedMovie}
+          topRated={topRated}
+        />}
       <Footer />
     </>
   );

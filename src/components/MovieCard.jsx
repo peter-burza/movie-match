@@ -15,56 +15,77 @@ export default function MovieCard(props) {
 
   const modalData = [
     {
-      cache: {
-        dataType: "Details",
-        loading: movieContentLoading,
-        localStorageName: "movie-details-database",
-        movieId: id,
-        setData: setMovieDetails,
-      },
-      fetch: {
-        dataType: "Details",
-        baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
-        setLoading: movieContentLoading,
-        setFetchedData: setMovieDetails,
-        movieId: id,
-        localStorageName: "movie-details-database",
-      },
+      dataType: "Details",
+      localStorageName: "movie-details-database",
+      setData: setMovieDetails,
+      baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
     },
     {
-      cache: {
-        dataType: "Release Dates",
-        loading: movieContentLoading,
-        localStorageName: "movie-release_dates-database",
-        movieId: id,
-        setData: setMovieReleaseDates,
-      },
-      fetch: {
-        dataType: "Release Dates",
-        baseUrl: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
-        setLoading: movieContentLoading,
-        setFetchedData: setMovieReleaseDates,
-        movieId: id,
-        localStorageName: "movie-release_dates-database",
-      },
+      dataType: "Release Dates",
+      localStorageName: "movie-release_dates-database",
+      setData: setMovieReleaseDates,
+      baseUrl: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
     },
     {
-      cache: {
-        dataType: "Credits",
-        loading: movieContentLoading,
-        localStorageName: "movie-credits-database",
-        movieId: id,
-        setData: setMovieCredits,
-      },
-      fetch: {
-        dataType: "Credits",
-        baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-        setLoading: movieContentLoading,
-        setFetchedData: setMovieCredits,
-        movieId: id,
-        localStorageName: "movie-credits-database",
-      },
+      dataType: "Credits",
+      localStorageName: "movie-credits-database",
+      setData: setMovieCredits,
+      baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
     },
+
+
+
+    // {
+    //   cache: {
+    //     dataType: "Details",
+    //     loading: movieContentLoading,
+    //     localStorageName: "movie-details-database",
+    //     movieId: id,
+    //     setData: setMovieDetails,
+    //   },
+    //   fetch: {
+    //     dataType: "Details",
+    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+    //     setLoading: movieContentLoading,
+    //     setFetchedData: setMovieDetails,
+    //     movieId: id,
+    //     localStorageName: "movie-details-database",
+    //   },
+    // },
+    // {
+    //   cache: {
+    //     dataType: "Release Dates",
+    //     loading: movieContentLoading,
+    //     localStorageName: "movie-release_dates-database",
+    //     movieId: id,
+    //     setData: setMovieReleaseDates,
+    //   },
+    //   fetch: {
+    //     dataType: "Release Dates",
+    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
+    //     setLoading: movieContentLoading,
+    //     setFetchedData: setMovieReleaseDates,
+    //     movieId: id,
+    //     localStorageName: "movie-release_dates-database",
+    //   },
+    // },
+    // {
+    //   cache: {
+    //     dataType: "Credits",
+    //     loading: movieContentLoading,
+    //     localStorageName: "movie-credits-database",
+    //     movieId: id,
+    //     setData: setMovieCredits,
+    //   },
+    //   fetch: {
+    //     dataType: "Credits",
+    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+    //     setLoading: movieContentLoading,
+    //     setFetchedData: setMovieCredits,
+    //     movieId: id,
+    //     localStorageName: "movie-credits-database",
+    //   },
+    // },
   ];
 
   function formatMinutes(totalMinutes) {
@@ -126,30 +147,59 @@ export default function MovieCard(props) {
     modalData.map((d) => {
       if (
         !tryGetCacheData(
-          d.cache.dataType,
-          d.cache.loading,
-          d.cache.localStorageName,
-          d.cache.movieId,
-          d.cache.setData
+          d.dataType,
+          movieContentLoading,
+          d.localStorageName,
+          id,
+          d.setData
         )
       ) {
         fetchData(
-          d.fetch.dataType,
-          d.fetch.baseUrl,
-          d.fetch.setLoading,
-          d.fetch.setFetchedData,
-          d.fetch.movieId,
-          d.fetch.localStorageName
+          d.dataType,
+          d.baseUrl,
+          setMovieContentLoading,
+          d.setData,
+          id,
+          d.localStorageName
         );
       }
     });
+
+    /*
+  {
+      dataType: "Credits",
+      localStorageName: "movie-credits-database",
+      setData: setMovieCredits,
+      baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+    },
+
+
+
+    // {
+    //   cache: {
+    //     dataType: "Details",
+    //     loading: movieContentLoading,
+    //     localStorageName: "movie-details-database",
+    //     movieId: id,
+    //     setData: setMovieDetails,
+    //   },
+    //   fetch: {
+    //     dataType: "Details",
+    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+    //     setLoading: movieContentLoading,
+    //     setFetchedData: setMovieDetails,
+    //     movieId: id,
+    //     localStorageName: "movie-details-database",
+    //   },
+    // },
+    */
 
   }, [modalVisible]);
 
   return (
     <div>
       {modalVisible &&
-        (!movieDetails && !movieCredits && ! movieReleaseDates && !movieContentLoading ? (
+        (!movieDetails && !movieCredits && !movieReleaseDates && !movieContentLoading ? (
           <Modal
             handleCloseModal={() => {
               setModalVisible(false);
