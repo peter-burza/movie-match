@@ -12,6 +12,7 @@ export default function MovieCard(props) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [movieReleaseDates, setMovieReleaseDates] = useState(null);
   const [movieCredits, setMovieCredits] = useState(null);
+  const [movieVideos, setMovieVideos] = useState(null);
 
   const modalData = [
     {
@@ -31,6 +32,12 @@ export default function MovieCard(props) {
       localStorageName: "movie-credits-database",
       setData: setMovieCredits,
       baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+    },
+    {
+      dataType: "Videos",
+      localStorageName: "movie-videos-database",
+      setData: setMovieVideos,
+      baseUrl: `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
     },
   ];
 
@@ -126,7 +133,7 @@ export default function MovieCard(props) {
               alt="image failed to load"
               className="max-h-full"
             />
-            <div className="flex flex-col gap-13 overflow-y-auto max-h-[calc(90vh-9rem)] pr-4">
+            <div className="flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]">
               <div className="flex flex-col gap-5">
                 <div className="flex justify-between">
                   <h6 className="text-4xl font-medium tracking-wider">
@@ -178,6 +185,23 @@ export default function MovieCard(props) {
                     </p>
                   </div>
                 </div>
+              </div>
+              <div className="flex flex-wrap justify-center gap-5 m-3 rounded-lg">
+                {movieVideos?.results?.filter((movie) => ['trailer', 'teaser']
+                  .some((keyword) => movie.name.toLowerCase().includes(keyword)))
+                  .map((trailer, idx) => (
+                    <div className=" py-2">
+                      <iframe
+                        key={trailer.id || idx}
+                        width="280"
+                        height="190"
+                        src={`https://www.youtube.com/embed/${trailer.key}`}
+                        title="YouTube video player"
+                        allowFullScreen>
+                      </iframe>
+                    </div>
+
+                  ))}
               </div>
             </div>
           </Modal>
