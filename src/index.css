@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
 #root {
-  max-width: 1432px;
-  padding: 0 32px;
-  margin: 0 auto;
+}
+
+* {
+  font-family: "Open Sans", Verdana, Geneva, Tahoma, sans-serif;
+}
+
+main {
+  flex: 1;
 }
 
 .modal-container {
@@ -44,15 +49,10 @@
   max-height: 90vh;
   width: 100%;
   margin: 0 auto;
-  /* max-height: 75vh; */
-  /* border-radius: 1rem; */
-  /* border: 1px solid rgb(241, 237, 237); */
   background: rgb(0, 0, 0);
   padding: 4.5rem;
   display: flex;
   flex-direction: row;
-  /* align-items: center;
-  justify-content: center; */
   gap: 4rem;
 }
 
@@ -69,4 +69,20 @@
 ::-webkit-scrollbar-thumb {
   background-color: #4b4b4b;
   border-radius: 5px;
+}
+
+.interactive-container {
+  transition-duration: 200ms;
+}
+
+/* Styles when scrolled */
+[data-scrolled="true"] .interactive-container {
+  opacity: 0.5;
+  padding-top: 2rem;
+}
+
+[data-scrolled="true"] .interactive-container:hover,
+[data-scrolled="true"] .interactive-container:focus-within {
+  opacity: 1;
+  padding-top: 2rem;
 }

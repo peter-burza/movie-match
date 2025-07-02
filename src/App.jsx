@@ -38,7 +38,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <SearchBar
         searchedMovie={searchedMovie}
         setSearchedMovie={setSearchedMovie}
@@ -49,7 +49,7 @@ function App() {
           topRated={topRated}
         />}
       <Footer />
-    </>
+    </div>
   );
 }
 

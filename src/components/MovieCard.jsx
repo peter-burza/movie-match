@@ -8,7 +8,7 @@ export default function MovieCard(props) {
     moviePreviewData || {};
   const [modalVisible, setModalVisible] = useState(false);
   const [movieContentLoading, setMovieContentLoading] = useState(false);
-  const [movieImages, setMovieImages] = useState(null);
+  // const [movieImages, setMovieImages] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [movieReleaseDates, setMovieReleaseDates] = useState(null);
   const [movieCredits, setMovieCredits] = useState(null);
@@ -32,60 +32,6 @@ export default function MovieCard(props) {
       setData: setMovieCredits,
       baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
     },
-
-
-
-    // {
-    //   cache: {
-    //     dataType: "Details",
-    //     loading: movieContentLoading,
-    //     localStorageName: "movie-details-database",
-    //     movieId: id,
-    //     setData: setMovieDetails,
-    //   },
-    //   fetch: {
-    //     dataType: "Details",
-    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
-    //     setLoading: movieContentLoading,
-    //     setFetchedData: setMovieDetails,
-    //     movieId: id,
-    //     localStorageName: "movie-details-database",
-    //   },
-    // },
-    // {
-    //   cache: {
-    //     dataType: "Release Dates",
-    //     loading: movieContentLoading,
-    //     localStorageName: "movie-release_dates-database",
-    //     movieId: id,
-    //     setData: setMovieReleaseDates,
-    //   },
-    //   fetch: {
-    //     dataType: "Release Dates",
-    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}/release_dates`,
-    //     setLoading: movieContentLoading,
-    //     setFetchedData: setMovieReleaseDates,
-    //     movieId: id,
-    //     localStorageName: "movie-release_dates-database",
-    //   },
-    // },
-    // {
-    //   cache: {
-    //     dataType: "Credits",
-    //     loading: movieContentLoading,
-    //     localStorageName: "movie-credits-database",
-    //     movieId: id,
-    //     setData: setMovieCredits,
-    //   },
-    //   fetch: {
-    //     dataType: "Credits",
-    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-    //     setLoading: movieContentLoading,
-    //     setFetchedData: setMovieCredits,
-    //     movieId: id,
-    //     localStorageName: "movie-credits-database",
-    //   },
-    // },
   ];
 
   function formatMinutes(totalMinutes) {
@@ -103,18 +49,7 @@ export default function MovieCard(props) {
   }
 
   function getAge(releaseDates) {
-    const priorityCountries = [
-      "CZ",
-      "US",
-      "GB",
-      "DE",
-      "FR",
-      "IN",
-      "JP",
-      "KR",
-      "CA",
-      "AU",
-    ];
+    const priorityCountries = ["CZ", "US", "GB", "DE", "FR", "IN", "JP", "KR", "CA", "AU"];
 
     const filteredResults = releaseDates?.results.find((result) => {
       const code = result.iso_3166_1?.toUpperCase();
@@ -164,35 +99,6 @@ export default function MovieCard(props) {
         );
       }
     });
-
-    /*
-  {
-      dataType: "Credits",
-      localStorageName: "movie-credits-database",
-      setData: setMovieCredits,
-      baseUrl: `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-    },
-
-
-
-    // {
-    //   cache: {
-    //     dataType: "Details",
-    //     loading: movieContentLoading,
-    //     localStorageName: "movie-details-database",
-    //     movieId: id,
-    //     setData: setMovieDetails,
-    //   },
-    //   fetch: {
-    //     dataType: "Details",
-    //     baseUrl: `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
-    //     setLoading: movieContentLoading,
-    //     setFetchedData: setMovieDetails,
-    //     movieId: id,
-    //     localStorageName: "movie-details-database",
-    //   },
-    // },
-    */
 
   }, [modalVisible]);
 
@@ -281,7 +187,7 @@ export default function MovieCard(props) {
         onClick={() => {
           setModalVisible(true);
         }}
-        className="relative max-w-55 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none"
+        className="relative xl:max-w-55 md:max-w-45 sm:max-w-40 max-w-20 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none cursor-pointer shadow-[0_2px_15px_3px_gray]"
       >
         <img
           src={`https://image.tmdb.org/t/p/original${poster_path}`}
