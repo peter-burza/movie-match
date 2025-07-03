@@ -45,7 +45,7 @@ export default function Movies(props) {
   }
 
   return (
-    <main className="flex flex-wrap gap-10 pb-10 pt-36 justify-center max-w-7xl px-[32px] mx-auto">
+    <main className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 pb-10 pt-36 justify-center max-w-7xl px-3 lg:px-[32px] mx-auto">
       {console.log(topRated.results)}
       {previewData?.results.map((moviePreviewData, movieDataIndex) => {
         if (!moviePreviewData.poster_path) return;
