@@ -90,15 +90,12 @@ export default function MovieCard(props) {
   function renderMovieTrailers() {
     if (!trailerList) return null;
 
-    const pageWidth = document.documentElement.scrollWidth;
-    const videoWidth = pageWidth < 640 ? "200" : "280"
-
     return trailerList.map((trailer, idx) => (
       <div className="py-2 pb-5" key={trailer.id || idx}>
         <iframe
           className="shadow-[0_0_10px_#8a8a8a] rounded-2xl"
-          width={videoWidth}
-          height="auto"
+          width="280"
+          height="181"
           src={`https://www.youtube.com/embed/${trailer.key}`}
           title="YouTube video player"
           allowFullScreen
@@ -243,28 +240,12 @@ export default function MovieCard(props) {
                     </div>
                   </div>
                   <div className="flex flex-col gap-4">
-                    {/* <p>
-                      {movieCredits?.cast
-                        .slice(0, 3)
-                        .map((actor) => {
-                          return actor.original_name;
-                        })
-                        .join(", ") || "Unknow Starring"}
-                    </p> */}
-                    {/* <p>
-                      {movieCredits?.crew.find(
-                        (crewMember) => crewMember.job === "Director"
-                      )?.original_name || "Unknow Director"}
-                    </p> */}
-                    {/* <p>
-                      {renderGenres(movieDetails)}
-                    </p> */}
                   </div>
                 </div>
               </div>
-              <div>
+              <div className={trailerList?.length < 1 ? 'hidden' : ''}>
                 <p className="text-lg">Related Videos</p>
-                <div id="trailer-container" className={`flex ${trailerList?.length < 2 ? 'justify-center' : ''} gap-5 m-3 rounded-lg scroll-container`}>
+                <div id="trailer-container" className={`flex ${trailerList?.length < 2 ? 'justify-center' : ''} gap-5 m-3 scroll-container`}>
                   {renderMovieTrailers(movieVideos)}
                 </div>
               </div>
