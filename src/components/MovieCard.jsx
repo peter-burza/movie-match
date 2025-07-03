@@ -174,83 +174,85 @@ export default function MovieCard(props) {
             </div>
           </Modal>
         ) : (
-          <Modal
-            handleCloseModal={() => {
-              setModalVisible(false);
-            }}
-          >
-            <img
-              src={`https://image.tmdb.org/t/p/original${poster_path}`}
-              alt="image failed to load"
-              className="lg:h-146 xs:aspect-[1/1] xs:object-contain s:aspect-[6/4] lg:aspect-[2/3] xl:h-176 2xl:h-full"
-            />
-            <div className="flex flex-col gap-10 max-h-[calc(90vh-9rem)] lg:overflow-y-hidden"> {/*flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]*/}
-              <div className="flex flex-col gap-2">
-                {/* flex flex-col gap-5 */}
-                <div className="flex flex-wrap justify-between">
-                  {/* flex justify-between */}
-                  <h6 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-medium tracking-wider"> {/* text-4xl font-medium tracking-wider*/}
-                    {original_title}
-                  </h6>
-                  <h5 className="flex flex-row items-end text-lg sm:text-2xl gap-1">
-                    {/* flex flex-row items-end text-3xl gap-1 */}
-                    <span>{movieDetails?.vote_average.toFixed(1)}</span>
-                    <i className="fa-solid fa-star text-sm sm:text-lg text-yellow-400 pb-2"></i>
-                    {/* fa-solid fa-star text-lg text-yellow-400 pb-2 */}
-                  </h5>
+          <div className="bg-black ">
+            <Modal
+              handleCloseModal={() => {
+                setModalVisible(false);
+              }}
+            >
+              <img
+                src={`https://image.tmdb.org/t/p/original${poster_path}`}
+                alt="image failed to load"
+                className="lg:h-146 xs:aspect-[1/1] xs:object-contain s:aspect-[6/4] lg:aspect-[2/3] xl:h-176 2xl:h-full"
+              />
+              <div className="flex flex-col gap-10 max-h-[calc(90vh-9rem)] lg:overflow-y-hidden"> {/*flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]*/}
+                <div className="flex flex-col gap-2">
+                  {/* flex flex-col gap-5 */}
+                  <div className="flex flex-wrap justify-between">
+                    {/* flex justify-between */}
+                    <h6 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-medium tracking-wider"> {/* text-4xl font-medium tracking-wider*/}
+                      {original_title}
+                    </h6>
+                    <h5 className="flex flex-row items-end text-lg sm:text-2xl gap-1">
+                      {/* flex flex-row items-end text-3xl gap-1 */}
+                      <span>{movieDetails?.vote_average.toFixed(1)}</span>
+                      <i className="fa-solid fa-star text-sm sm:text-lg text-yellow-400 pb-2"></i>
+                      {/* fa-solid fa-star text-lg text-yellow-400 pb-2 */}
+                    </h5>
+                  </div>
+                  <p className="text-gray-500">
+                    {getYear(release_date)}
+                    {formatMinutes(movieDetails?.runtime) &&
+                      " | " + formatMinutes(movieDetails?.runtime)}
+                    {getAge(movieReleaseDates) &&
+                      " | " + getAge(movieReleaseDates)}
+                  </p>
                 </div>
-                <p className="text-gray-500">
-                  {getYear(release_date)}
-                  {formatMinutes(movieDetails?.runtime) &&
-                    " | " + formatMinutes(movieDetails?.runtime)}
-                  {getAge(movieReleaseDates) &&
-                    " | " + getAge(movieReleaseDates)}
-                </p>
-              </div>
-              <div className="flex flex-col gap-8">
-                <div>
-                  <p>{overview}</p>
-                </div>
-                <div className="flex gap-10">
-                  <div className="flex flex-col gap-4">
-                    <div className="flex">
-                      <p className="min-w-24 text-gray-500">Starring</p>
-                      <p className="flex flex-col">
-                        {movieCredits?.cast
-                          .slice(0, 3)
-                          .map((actor) => {
-                            return actor.original_name;
-                          })
-                          .join(", ") || "Unknow Starring"}
-                      </p>
+                <div className="flex flex-col gap-8">
+                  <div>
+                    <p>{overview}</p>
+                  </div>
+                  <div className="flex gap-10">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex">
+                        <p className="min-w-24 text-gray-500">Starring</p>
+                        <p className="flex flex-col">
+                          {movieCredits?.cast
+                            .slice(0, 3)
+                            .map((actor) => {
+                              return actor.original_name;
+                            })
+                            .join(", ") || "Unknow Starring"}
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="min-w-24 text-gray-500">Directed</p>
+                        <p>
+                          {movieCredits?.crew.find(
+                            (crewMember) => crewMember.job === "Director"
+                          )?.original_name || "Unknow Director"}
+                        </p>
+                      </div>
+                      <div className="flex">
+                        <p className="min-w-24 text-gray-500">Genre</p>
+                        <p>
+                          {renderGenres(movieDetails)}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex">
-                      <p className="min-w-24 text-gray-500">Directed</p>
-                      <p>
-                        {movieCredits?.crew.find(
-                          (crewMember) => crewMember.job === "Director"
-                        )?.original_name || "Unknow Director"}
-                      </p>
-                    </div>
-                    <div className="flex">
-                      <p className="min-w-24 text-gray-500">Genre</p>
-                      <p>
-                        {renderGenres(movieDetails)}
-                      </p>
+                    <div className="flex flex-col gap-4">
                     </div>
                   </div>
-                  <div className="flex flex-col gap-4">
+                </div>
+                <div className={trailerList?.length < 1 ? 'hidden' : ''}>
+                  <p className="text-lg">Related Videos</p>
+                  <div id="trailer-container" className={`flex ${trailerList?.length < 2 ? 'justify-center' : ''} gap-5 m-3 scroll-container`}>
+                    {renderMovieTrailers(movieVideos)}
                   </div>
                 </div>
               </div>
-              <div className={trailerList?.length < 1 ? 'hidden' : ''}>
-                <p className="text-lg">Related Videos</p>
-                <div id="trailer-container" className={`flex ${trailerList?.length < 2 ? 'justify-center' : ''} gap-5 m-3 scroll-container`}>
-                  {renderMovieTrailers(movieVideos)}
-                </div>
-              </div>
-            </div>
-          </Modal>
+            </Modal>
+          </div>
         ))}
 
       {/* <button
