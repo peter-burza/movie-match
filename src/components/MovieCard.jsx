@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetchData, tryGetCacheData } from "../utils/index.js";
 import Modal from "./Modal";
 
@@ -8,11 +8,11 @@ export default function MovieCard(props) {
     moviePreviewData || {};
   const [modalVisible, setModalVisible] = useState(false);
   const [movieContentLoading, setMovieContentLoading] = useState(false);
-  // const [movieImages, setMovieImages] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
   const [movieReleaseDates, setMovieReleaseDates] = useState(null);
   const [movieCredits, setMovieCredits] = useState(null);
   const [movieVideos, setMovieVideos] = useState(null);
+  const [trailerList, settrailerList] = useState(null);
 
   const modalData = [
     {
@@ -84,6 +84,49 @@ export default function MovieCard(props) {
     return cert;
   }
 
+
+  // --- Render Functions --- //
+
+  function renderMovieTrailers() {
+    if (!trailerList) return null;
+
+    const pageWidth = document.documentElement.scrollWidth;
+    const videoWidth = pageWidth < 640 ? "200" : "280"
+
+    return trailerList.map((trailer, idx) => (
+      <div className="py-2 pb-5" key={trailer.id || idx}>
+        <iframe
+          className="shadow-[0_0_10px_#8a8a8a] rounded-2xl"
+          width={videoWidth}
+          height="auto"
+          src={`https://www.youtube.com/embed/${trailer.key}`}
+          title="YouTube video player"
+          allowFullScreen
+        ></iframe>
+      </div>
+    ));
+  }
+
+  function renderGenres(details) {
+    if (!details?.genres) return null
+
+    const genres = details?.genres.map((genre) => {
+      return genre.name;
+    })?.join(", ") || "Unknow Genre"
+
+    return genres
+  }
+
+  function renderGenres(details) {
+    if (!details?.genres) return null
+
+    const genres = details?.genres.map((genre) => {
+      return genre.name;
+    })?.join(", ") || "Unknow Genre"
+
+    return genres
+  }
+
   useEffect(() => {
     if (!modalVisible) return;
     modalData.map((d) => {
@@ -109,6 +152,17 @@ export default function MovieCard(props) {
 
   }, [modalVisible]);
 
+  useEffect(() => {
+    if (!movieVideos?.results) return;
+
+    const trailers = movieVideos.results.filter((video) =>
+      ["trailer", "teaser"].some((keyword) =>
+        video.name.toLowerCase().includes(keyword)
+      )
+    );
+    settrailerList(trailers)
+  }, [movieVideos]);
+
   return (
     <div>
       {modalVisible &&
@@ -131,20 +185,24 @@ export default function MovieCard(props) {
             <img
               src={`https://image.tmdb.org/t/p/original${poster_path}`}
               alt="image failed to load"
-              className="max-h-full"
+              className="lg:h-146 xs:aspect-[1/1] xs:object-contain s:aspect-[6/4] lg:aspect-[2/3] xl:h-176 2xl:h-full"
             />
-            <div className="flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]">
-              <div className="flex flex-col gap-5">
-                <div className="flex justify-between">
-                  <h6 className="text-4xl font-medium tracking-wider">
+            <div className="flex flex-col gap-10 max-h-[calc(90vh-9rem)] lg:overflow-y-hidden"> {/*flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]*/}
+              <div className="flex flex-col gap-2">
+                {/* flex flex-col gap-5 */}
+                <div className="flex flex-wrap justify-between">
+                  {/* flex justify-between */}
+                  <h6 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-medium tracking-wider"> {/* text-4xl font-medium tracking-wider*/}
                     {original_title}
                   </h6>
-                  <h5 className="flex flex-row items-end text-3xl gap-1">
+                  <h5 className="flex flex-row items-end text-lg sm:text-2xl gap-1">
+                    {/* flex flex-row items-end text-3xl gap-1 */}
                     <span>{movieDetails?.vote_average.toFixed(1)}</span>
-                    <i className="fa-solid fa-star text-lg text-yellow-400 pb-2"></i>
+                    <i className="fa-solid fa-star text-sm sm:text-lg text-yellow-400 pb-2"></i>
+                    {/* fa-solid fa-star text-lg text-yellow-400 pb-2 */}
                   </h5>
                 </div>
-                <p>
+                <p className="text-gray-500">
                   {getYear(release_date)}
                   {formatMinutes(movieDetails?.runtime) &&
                     " | " + formatMinutes(movieDetails?.runtime)}
@@ -157,51 +215,58 @@ export default function MovieCard(props) {
                   <p>{overview}</p>
                 </div>
                 <div className="flex gap-10">
-                  <div className="flex flex-col gap-4 text-gray-500">
-                    <p>Starring</p>
-                    <p>Directed</p>
-                    <p>Genre</p>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex">
+                      <p className="min-w-24 text-gray-500">Starring</p>
+                      <p className="flex flex-col">
+                        {movieCredits?.cast
+                          .slice(0, 3)
+                          .map((actor) => {
+                            return actor.original_name;
+                          })
+                          .join(", ") || "Unknow Starring"}
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="min-w-24 text-gray-500">Directed</p>
+                      <p>
+                        {movieCredits?.crew.find(
+                          (crewMember) => crewMember.job === "Director"
+                        )?.original_name || "Unknow Director"}
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <p className="min-w-24 text-gray-500">Genre</p>
+                      <p>
+                        {renderGenres(movieDetails)}
+                      </p>
+                    </div>
                   </div>
                   <div className="flex flex-col gap-4">
-                    <p>
+                    {/* <p>
                       {movieCredits?.cast
                         .slice(0, 3)
                         .map((actor) => {
                           return actor.original_name;
                         })
                         .join(", ") || "Unknow Starring"}
-                    </p>
-                    <p>
+                    </p> */}
+                    {/* <p>
                       {movieCredits?.crew.find(
                         (crewMember) => crewMember.job === "Director"
                       )?.original_name || "Unknow Director"}
-                    </p>
-                    <p>
-                      {movieDetails?.genres
-                        .map((genre) => {
-                          return genre.name;
-                        })
-                        ?.join(", ") || "Unknow Genre"}
-                    </p>
+                    </p> */}
+                    {/* <p>
+                      {renderGenres(movieDetails)}
+                    </p> */}
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-center gap-5 m-3 rounded-lg">
-                {movieVideos?.results?.filter((movie) => ['trailer', 'teaser']
-                  .some((keyword) => movie.name.toLowerCase().includes(keyword)))
-                  .map((trailer, idx) => (
-                    <div className=" py-2">
-                      <iframe
-                        key={trailer.id || idx}
-                        width="280"
-                        height="190"
-                        src={`https://www.youtube.com/embed/${trailer.key}`}
-                        title="YouTube video player"
-                        allowFullScreen>
-                      </iframe>
-                    </div>
-
-                  ))}
+              <div>
+                <p className="text-lg">Related Videos</p>
+                <div id="trailer-container" className={`flex ${trailerList?.length < 2 ? 'justify-center' : ''} gap-5 m-3 rounded-lg scroll-container`}>
+                  {renderMovieTrailers(movieVideos)}
+                </div>
               </div>
             </div>
           </Modal>
