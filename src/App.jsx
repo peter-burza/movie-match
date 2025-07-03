@@ -2,7 +2,6 @@ import SearchBar from "./components/SearchBar";
 import Movies from "./components/Movies";
 import Footer from "./components/Footer";
 import { useEffect, useState } from "react";
-import { fetchData } from "./utils";
 
 function App() {
   const [initialized, setInitialized] = useState(false)

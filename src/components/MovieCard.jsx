@@ -4,7 +4,7 @@ import Modal from "./Modal";
 
 export default function MovieCard(props) {
   const { moviePreviewData } = props;
-  const { original_title, overview, poster_path, video, id, release_date } =
+  const { original_title, overview, poster_path, id, release_date } =
     moviePreviewData || {};
   const [modalVisible, setModalVisible] = useState(false);
   const [movieContentLoading, setMovieContentLoading] = useState(false);
@@ -183,7 +183,7 @@ export default function MovieCard(props) {
               <img
                 src={`https://image.tmdb.org/t/p/original${poster_path}`}
                 alt="image failed to load"
-                className="lg:h-146 xs:aspect-[1/1] xs:object-contain s:aspect-[6/4] lg:aspect-[2/3] xl:h-176 2xl:h-full"
+                className="lg:h-146 xs:aspect-[1/1] xs:object-contain s:aspect-[6/4] lg:aspect-[2/3] xl:h-176 2xl:h-full border-gradient"
               />
               <div className="flex flex-col gap-10 max-h-[calc(90vh-9rem)] lg:overflow-y-hidden"> {/*flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]*/}
                 <div className="flex flex-col gap-2">
@@ -255,21 +255,6 @@ export default function MovieCard(props) {
           </div>
         ))}
 
-      {/* <button
-        onClick={() => {
-          setModalVisible(true);
-        }}
-        className="relative xl:max-w-55 md:max-w-45 sm:max-w-40 max-w-20 group aspect-[12/15] overflow-hidden rounded-xl place-items-center appearance-none cursor-pointer shadow-[0_2px_15px_3px_gray]"
-      >
-        <img
-          src={`https://image.tmdb.org/t/p/original${poster_path}`}
-          alt={original_title || "Movie poster"}
-          className="object-cover "
-        />
-        <div className="absolute bottom-0 left-0 w-full h-[20%] bg-gradient-to-t from-black to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex items-center justify-center text-white">
-          <span className="text-sm p-2">{original_title}</span>
-        </div>
-      </button> */}
       <button onClick={() => { setModalVisible(true); }} class="relative xl:max-w-55 md:max-w-45 sm:max-w-40 max-w-35 group aspect-[12/15] group overflow-hidden rounded-xl place-items-center appearance-none cursor-pointer shadow-[0_2px_15px_3px_gray]">
         <img
           src={`https://image.tmdb.org/t/p/original${poster_path}`}

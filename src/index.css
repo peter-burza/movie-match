@@ -112,6 +112,38 @@ main {
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
+/* .border-gradient {
+  position: relative;
+  overflow: hidden;
+} */
+
+.border-gradient {
+  position: relative;
+  display: inline-block;
+
+  mask-image:
+    /* Edge fades */
+    linear-gradient(to top, transparent 0px, black 20px),
+    linear-gradient(to bottom, transparent 0px, black 20px),
+    linear-gradient(to left, transparent 0px, black 20px),
+    linear-gradient(to right, transparent 0px, black 20px),
+
+    /* Corner fades */
+    radial-gradient(circle at top left, transparent 0px, black 40px),
+    radial-gradient(circle at top right, transparent 0px, black 40px),
+    radial-gradient(circle at bottom left, transparent 0px, black 40px),
+    radial-gradient(circle at bottom right, transparent 0px, black 40px);
+
+  mask-composite: intersect;
+  -webkit-mask-composite: destination-in;
+}
+
+@media (min-width: 528px) {
+  .border-gradient {
+    mask-image: none;
+  }
+}
+
 @media (min-width: 1024px) {
   .modal-content {
     padding: 2.5rem;
