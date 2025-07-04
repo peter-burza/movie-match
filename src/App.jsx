@@ -37,7 +37,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div id="parent" className="min-h-screen flex flex-col duration-200">
       <SearchBar
         searchedMovie={searchedMovie}
         setSearchedMovie={setSearchedMovie}
