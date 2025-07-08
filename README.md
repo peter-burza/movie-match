@@ -1,9 +1,6 @@
-# Movie Search
+# Movie Match | Movie Searcher 📺
 
-###### personal notes:
+You can search any movie you want, and check the details, trailers and teasers! 
+Data fetching from **TMDb**
 
-TMDb username: peter-burza
-
-notes:
-- add footer
-- add loading state into fetching functions
+#### ✔️ Try the ***[Movie Match](https://duckduckgo.com)*** yourself!
