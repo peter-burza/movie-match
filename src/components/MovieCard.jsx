@@ -114,18 +114,16 @@ export default function MovieCard(props) {
     return genres
   }
 
-  function renderGenres(details) {
-    if (!details?.genres) return null
-
-    const genres = details?.genres.map((genre) => {
-      return genre.name;
-    })?.join(", ") || "Unknow Genre"
-
-    return genres
-  }
 
   useEffect(() => {
+    const topDiv = document.getElementById("parent")
+    if (modalVisible) {
+      topDiv.style.filter = 'blur(15px)'
+    } else {
+      topDiv.style.filter = 'blur(0px)'
+    }
     if (!modalVisible) return;
+
     modalData.map((d) => {
       if (
         !tryGetCacheData(
@@ -160,14 +158,6 @@ export default function MovieCard(props) {
     settrailerList(trailers)
   }, [movieVideos]);
 
-  useEffect(() => {
-    const topDiv = document.getElementById("parent")
-    if (modalVisible) {
-      topDiv.style.filter = 'blur(15px)'
-    } else {
-      topDiv.style.filter = 'blur(0px)'
-    }
-  }, [modalVisible])
 
   return (
     <div>
@@ -194,19 +184,15 @@ export default function MovieCard(props) {
               alt="image failed to load"
               className="lg:h-146 xs:aspect-[1/1] xs:object-contain s:aspect-[6/4] lg:aspect-[2/3] xl:h-full border-gradient"
             />
-            <div className="flex flex-col gap-10 pr-3 max-h-[calc(90vh-9rem)] lg:overflow-y-auto"> {/*flex flex-col gap-13 pr-5 overflow-y-auto max-h-[calc(90vh-9rem)]*/}
+            <div className="flex flex-col gap-10 pr-3 max-h-[calc(90vh-9rem)] lg:overflow-y-auto">
               <div className="flex flex-col gap-2">
-                {/* flex flex-col gap-5 */}
                 <div className="flex flex-wrap justify-between">
-                  {/* flex justify-between */}
-                  <h6 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-medium tracking-wider"> {/* text-4xl font-medium tracking-wider*/}
+                  <h6 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-medium tracking-wider">
                     {original_title}
                   </h6>
                   <h5 className="flex flex-row items-end text-lg sm:text-2xl gap-1">
-                    {/* flex flex-row items-end text-3xl gap-1 */}
                     <span>{movieDetails?.vote_average.toFixed(1)}</span>
                     <i className="fa-solid fa-star text-sm sm:text-lg text-yellow-400 pb-2"></i>
-                    {/* fa-solid fa-star text-lg text-yellow-400 pb-2 */}
                   </h5>
                 </div>
                 <p className="text-gray-500">
@@ -262,7 +248,7 @@ export default function MovieCard(props) {
             </div>
           </Modal>
         ))}
-      <button onClick={() => { setModalVisible(true); }} class="relative xl:max-w-55 md:max-w-45 sm:max-w-40 max-w-35 group aspect-[12/15] group overflow-hidden rounded-xl place-items-center appearance-none cursor-pointer shadow-[0_2px_15px_3px_gray]">
+      <button onClick={() => { setModalVisible(true); }} className="relative xl:max-w-55 md:max-w-45 sm:max-w-40 max-w-35 group aspect-[12/15] group overflow-hidden rounded-xl place-items-center appearance-none cursor-pointer shadow-[0_2px_15px_3px_gray]">
         <img
           src={`https://image.tmdb.org/t/p/original${poster_path}`}
           alt={original_title || "Movie poster"}

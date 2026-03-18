@@ -14,7 +14,7 @@ export default function Movies(props) {
   // ---------  After searched a movie  --------- //
   useEffect(() => {
     if (!searchedMovie) return
-    console.log("searchedMovie changed:", searchedMovie);
+    // console.log("searchedMovie changed:", searchedMovie);
     if (
       tryGetCacheData(
         "preview data",
@@ -46,7 +46,7 @@ export default function Movies(props) {
 
   return (
     <main className="flex flex-wrap gap-6 sm:gap-8 lg:gap-10 pb-10 pt-36 justify-center max-w-7xl px-3 lg:px-[32px] mx-auto">
-      {console.log(topRated.results)}
+      {/* console.log(topRated.results) */}
       {previewData?.results.map((moviePreviewData, movieDataIndex) => {
         if (!moviePreviewData.poster_path) return;
         return (

@@ -9,7 +9,7 @@ export default function SearchBar(props) {
     });
 
     const handleKeyDown = (event) => {
-        console.log('Pressed:', event.key);
+        // console.log('Pressed:', event.key);
         if (event.key === 'Enter') {
             setSearchedMovie(searchValue)
         }

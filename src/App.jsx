@@ -23,7 +23,7 @@ function App() {
         };
         const res = await fetch(url, options);
         const fetchedData = await res.json();
-        console.log("Fetched top movie list from API:", fetchedData);
+        // console.log("Fetched top movie list from API:", fetchedData);
         setTopRated(fetchedData);
       } catch (err) {
         console.log(err);

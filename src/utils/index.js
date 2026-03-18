@@ -9,7 +9,7 @@ export function tryGetCacheData(dataType, loading, localStorageName, movie, setD
   //If the searched movie is in the cache, otherwise fetch form API
   if (searchedMovie in cache) {
     setData(cache[searchedMovie]);
-    console.log(`Found movie ${dataType} in cache: `, cache);
+    // console.log(`Found movie ${dataType} in cache: `, cache);
     return true;
   }
   return false
@@ -31,7 +31,7 @@ export async function fetchData(dataType, baseUrl, setLoading, setFetchedData, m
     };
     const res = await fetch(url, options);
     const fetchedData = await res.json();
-    console.log(`Fetched movie ${dataType} from API:`, fetchedData);
+    // console.log(`Fetched movie ${dataType} from API:`, fetchedData);
     setFetchedData(fetchedData);
     // save fetched data to cache
     cache[searchedMovie] = fetchedData;
